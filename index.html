@@ -197,6 +197,18 @@ body.adm{padding-bottom:84px}body.adm #tc{bottom:96px}button.fab:not(.eye):not(.
 .lg{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:13px;color:var(--mu)}.lg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
 @font-face{font-family:'HSL';font-weight:400;font-display:swap;src:url(fonts/HindSiliguri-Regular.ttf) format('truetype')}@font-face{font-family:'HSL';font-weight:500;font-display:swap;src:url(fonts/HindSiliguri-Medium.ttf) format('truetype')}@font-face{font-family:'HSL';font-weight:600;font-display:swap;src:url(fonts/HindSiliguri-SemiBold.ttf) format('truetype')}@font-face{font-family:'HSL';font-weight:700;font-display:swap;src:url(fonts/HindSiliguri-Bold.ttf) format('truetype')}
 .sk-w{display:grid;gap:14px}.sk{border-radius:20px;background:linear-gradient(90deg,#e3eee7 25%,#f2f8f4 37%,#e3eee7 63%);background-size:400% 100%;animation:skm 1.4s ease infinite}@keyframes skm{0%{background-position:100% 50%}100%{background-position:0 50%}}@media(prefers-reduced-motion:reduce){.sk{animation:none}}
+
+.bgs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.bgc{background:#e8f5ee;color:var(--g);border:1px solid #cfe9d7;border-radius:99px;padding:3px 14px;font-weight:600;box-shadow:none}.bgc.on{background:linear-gradient(160deg,#3fa65a,#2a8a45);color:#fff;border-color:#2a8a45;box-shadow:0 4px 10px -4px #2a8a4580}
+.mg{gap:10px;grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
+.mg div{border-radius:20px;padding:9px 10px;font-weight:600;transition:transform .15s,box-shadow .15s;box-shadow:0 8px 14px -8px #0f4d3166,inset 0 1px 0 #ffffffb0,inset 0 -3px 0 #00000014}
+.mg div b{font-size:16px;line-height:1.35}
+.mg div[data-rc]:hover{transform:translateY(-2px)}.mg div[data-rc]:active{transform:translateY(1px);box-shadow:0 3px 6px -4px #0f4d3166,inset 0 1px 0 #ffffffb0}
+.mg div.m-ok{background:linear-gradient(160deg,#47b062,#27853f)!important;box-shadow:0 8px 14px -8px #1f6b36aa,inset 0 1px 0 #ffffff55,inset 0 -3px 0 #0a4d2a40}
+.mg div.m-fut{background:linear-gradient(160deg,#f3fbf6,#d9eee1)!important}
+.mg div.m-miss{background:linear-gradient(160deg,#fff3f1,#fad3ce)!important;box-shadow:0 8px 14px -8px #c0392b66,inset 0 1px 0 #ffffffcc,inset 0 -3px 0 #c0392b1f}
+.mg div.m-na{background:linear-gradient(160deg,#f8faf9,#edf1ef)!important}
+.st>div{border-radius:20px;box-shadow:0 8px 16px -10px #0f4d3166,inset 0 1px 0 #ffffffb0}
 </style></head><body>
 <header><div><img src="logo.png" alt="লোগো"><b>নতুন দিগন্ত</b></div><span style="display:flex;gap:8px"><button class="w" id="bell" hidden aria-label="নোটিশ">🔔<i class="rd" hidden></i></button><button class="w" id="ins" hidden>📲 অ্যাপ ইনস্টল</button><button class="w" id="out" hidden>লগআউট</button></span></header>
 <main id="app"></main><div id="tc"></div>
@@ -461,7 +473,10 @@ new MutationObserver(ms=>ms.forEach(m=>{m.addedNodes.forEach(n=>{if(n.classList&
 addEventListener('popstate',e=>{if(popBusy){popBusy=false;return}closeMM();const o=[...document.querySelectorAll('.ov')].pop();if(o){o.remove();return}const st=e.state;if(st&&st.tab!==undefined&&me&&me.role=='admin'){tab=st.tab;render()}});
 
 function OV(x,t){const sh=t.total?Math.round(tot(x)/t.total*100):0;return `<div class="card"><h3>প্রতিষ্ঠানের অবস্থা</h3>${stats([['📅',bn(t.pc||0)+'/'+bn(t.count||0)+' জন','এ মাসে জমা দিয়েছেন'],['🥧',bn(sh)+'%','মোট সঞ্চয়ে আপনার ভাগ']])}${t.mo?`<h3 style="margin-top:14px">সবার মাসিক মোট জমা</h3>${bars(t.mo,lab)}`:''}</div>`}
-function DN(d){if(!d||!d.length)return '';const g={};d.forEach(x=>{(g[x.b]=g[x.b]||[]).push(x.n)});return `<div class="card"><h3>🩸 রক্তদাতা তালিকা</h3>${Object.keys(g).sort().map(k=>`<div class="dr"><span><b class="chip">${esc(k)}</b> ${g[k].map(esc).join(', ')}</span></div>`).join('')}<p class="mu" style="margin:8px 0 0">প্রয়োজনে অ্যাডমিনের মাধ্যমে যোগাযোগ করুন।</p></div>`}
+let DNA=[];
+const dnList=g=>{const L=DNA.filter(x=>!g||x.b==g);if(!L.length)return '<p class="mu">এই গ্রুপে কেউ নেই</p>';const m={};L.forEach(x=>{(m[x.b]=m[x.b]||[]).push(x.n)});return Object.keys(m).sort().map(k=>`<div class="dr"><span><b class="chip">${esc(k)}</b> ${m[k].map(esc).join(', ')}</span><small class="mu">${bn(m[k].length)} জন</small></div>`).join('')};
+function DN(d){DNA=d||[];if(!DNA.length)return '';const gs=[...new Set(DNA.map(x=>x.b))].sort();return `<div class="card" id="dnc"><h3>🩸 রক্তদাতা তালিকা</h3><div class="bgs"><button class="bgc on" data-dbg="">সব</button>${gs.map(g=>`<button class="bgc" data-dbg="${esc(g)}">${esc(g)}</button>`).join('')}</div><div id="dnl">${dnList('')}</div><p class="mu" style="margin:8px 0 0">প্রয়োজনে অ্যাডমিনের মাধ্যমে যোগাযোগ করুন।</p></div>`}
+document.addEventListener('click',e=>{const c=e.target.closest('[data-dbg]');if(!c)return;const box=c.closest('#dnc');if(!box)return;box.querySelectorAll('.bgc').forEach(x=>x.classList.toggle('on',x===c));box.querySelector('#dnl').innerHTML=dnList(c.dataset.dbg)});
 
 let CUR=null;
 const REM=x=>{const d=new Date();return lim()>=0&&d.getDate()>10&&!CM(x,d.getMonth())?`<div class="card" style="background:#f1faf3;border-color:#bfe3c8"><b>🌱 এ মাসের জমা এখনো বাকি</b><div class="mu">সুবিধামতো সময়ে জমা দিয়ে দিন। ধন্যবাদ।</div></div>`:''};
