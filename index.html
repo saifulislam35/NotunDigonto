@@ -275,7 +275,7 @@ async function editCash(c){const iso=/^\d\d-\d\d-\d{4}$/.test(c.d),o=document.cr
   for(let j=0;j<up.length;j+=400){const b=writeBatch(db);up.slice(j,j+400).forEach(x=>b.set(doc(db,'cash',x.id),{i:x.i,d:x.d,rec:x.rec,pay:x.pay,tot:x.tot,n:x.n||'',k:x.k||''}));await b.commit()}
   close();await log('ক্যাশ এন্ট্রি এডিট: '+c.d);await summ();toast('এন্ট্রি আপডেট হয়েছে');render()}}
 const bd=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]),td=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
-const YC=()=>{const c=new Date().getFullYear();returnArray.from({length:c-2023},(_,k)=>2025+k)};
+const YC=()=>{const c=new Date().getFullYear();return Array.from({length:c-2023},(_,k)=>2025+k)};
 const gA=(m,y,i)=>y==2026?m.m[i]||0:y==2025?(i>=5?m.m25[i-5]||0:0):(m.y?.[y]?.[i]||0);
 const sA=(m,y,i,v)=>{if(y==2026)m.m[i]=v;else if(y==2025){const o=m.m25[i-5]||0;m.m25[i-5]=v;m.b25=(m.b25||0)+v-o}else{m.y={...(m.y||{})};m.y[y]=[...(m.y[y]||Array(12).fill(0))];m.y[y][i]=v}};
 const gD=(m,y,i)=>m.dt?.[y+'-'+i],fd=d=>d?new Date(d).toLocaleDateString('bn-BD',{day:'numeric',month:'short',year:'numeric'}):'তারিখ নেই';
